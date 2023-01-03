@@ -66,30 +66,34 @@
   }
 </script>
 
-<main class="bg-neutral-900 w-screen h-screen">
+<main class="bg-neutral-900 w-screen h-full xl:h-screen">
   <h1 class="text-white font-petrona text-4xl text-center pt-10">
     Widerstand Kennzeichnungen
   </h1>
-  <div class="grid grid-cols-2 mt-32 mx-auto">
+  <div class="grid grid-cols-1 xl:grid-cols-2 mt-10 xs:mt-24 mx-auto">
     <div
-      class="ml-10 flex flex-col text-white gap-5 text-2xl justify-center border-r-neutral-800 border-r"
+      class="xl:ml-10 flex flex-col text-white gap-5 text-xl xs:text-2xl justify-center border-r-neutral-800 border-r"
     >
-      <div class="flex flex-row gap-2 h-fit justify-center">
+      <div class="flex flex-col 2xs:flex-row gap-2 h-fit justify-center items-center">
         <p class="">Widerstand:</p>
-        <input
-          type="text"
-          bind:value={$resistance}
-          class="text-black"
-          placeholder="42"
-        />
-        <p>&Omega;</p>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            bind:value={$resistance}
+            class="text-black w-fit max-w-sm"
+            placeholder="42"
+          />
+          <p>&Omega;</p>
+        </div>
       </div>
       <div
         class="w-5/6 h-5 border-b border-b-neutral-800 text-center mx-auto mt-5"
       >
         <span class="text-xl bg-neutral-900 px-5"> ODER </span>
       </div>
-      <div class="flex text-xl justify-around mt-8">
+      <div
+        class="flex flex-col xs:flex-row text-xl justify-around items-center my-4 xs:mt-8"
+      >
         <div>
           <p
             title="Der erste Ring gibt die Farbe der ersten Ziffer an."
@@ -147,18 +151,18 @@
         >
         <button
           class="text-lg bg-blue-500 py-2 px-5 rounded-lg hover:bg-blue-600 transition-all ease-in-out"
-          on:click={() => recalcResistance()}
-          >Anwenden</button
+          on:click={() => recalcResistance()}>Anwenden</button
         >
       </div>
     </div>
-    <div class="flex justify-center">
-      <table class="text-white w-full max-w-3xl h-48 ">
-        <tr class="text-3xl">
+    <hr class="block xl:hidden mt-10 mx-4 xs:mx-6 md:mx-12" />
+    <div class="flex justify-center mt-10 xl:mt-0 mx-4">
+      <table class="text-white w-full max-w-sm xs:max-w-xl 2xl:max-w-3xl h-48 ">
+        <tr class="text-xl 2xs:text-2xl xs:text-3xl">
           <th class="w-1/3">Attribut</th>
           <th class="w-2/3">Wert</th>
         </tr>
-        <tr class="text-xl">
+        <tr class="text-lg 2xs:text-xl">
           <td>Widerstand</td>
           <td
             >{$resistance && !isNaN(+$resistance)
@@ -167,7 +171,7 @@
             {$resistance !== '' && !isNaN(+$resistance) ? 'Ω' : ''}</td
           >
         </tr>
-        <tr class="text-xl">
+        <tr class="text-lg 2xs:text-xl">
           <td class=""
             >E-Reihe{eReihen.length === 1 ? '' : 'n'}
             <span
@@ -181,13 +185,13 @@
       </table>
     </div>
   </div>
-  <hr class="mx-12 mt-20" />
-  <div class="flex justify-center mt-36 my-auto">
+  <hr class="mt-20 mx-4 xs:mx-6 md:mx-12" />
+  <div class="flex flex-col justify-center w-full items-center">
     <svg
       width="449.99999999999994"
       height="110"
       xmlns="http://www.w3.org/2000/svg"
-      class="scale-150"
+      class="my-10 scale-75 2xs:scale-100 xl:scale-150 xl:my-24"
     >
       <g>
         <g id="svg_4">
@@ -254,5 +258,8 @@
         />
       </g>
     </svg>
+  </div>
+  <div>
+    <p class="fixed bottom-2 left-2 text-neutral-500">Impressum</p>
   </div>
 </main>

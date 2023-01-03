@@ -3,6 +3,10 @@ module.exports = {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
         extend: {
+            screens: {
+                '2xs': '460px',
+                'xs': '540px',
+            },
             spacing: {
                 '0.1': '0.1rem',
                 '5.5': '1.375rem',
