@@ -30,8 +30,8 @@ export class Color {
     'Weiß',
     '#ffffff',
   );
-  public static readonly GD = new Color(-1, -1, 0.1, 0.05, 'Gold', '#FFD700');
-  public static readonly SR = new Color(-1, -1, 0.01, 0.1, 'Silber', '#silver');
+  public static readonly GD = new Color(-1, -1, 0.1, 0.05, 'Gold', '#daa520');
+  public static readonly SR = new Color(-1, -1, 0.01, 0.1, 'Silber', '#C0C0C0');
   public static readonly NN = new Color(
     -1,
     -1,
@@ -49,6 +49,35 @@ export class Color {
     public name: string,
     public colorCode: string,
   ) {}
+
+  public static getColorByHex(hex: string): Color {
+    switch (hex) {
+      case '#000000':
+        return this.BK;
+      case '#7B3F00':
+        return this.BN;
+      case '#ff0000':
+        return this.RD;
+      case '#fb8500':
+        return this.OG;
+      case '#ffb703':
+        return this.YE;
+      case '#3a5a40':
+        return this.GN;
+      case '#0077b6':
+        return this.BU;
+      case '#8f2d56':
+        return this.VT;
+      case '#ffffff':
+        return this.WH;
+      case '#daa520':
+        return this.GD;
+      case '#C0C0C0':
+        return this.SR;
+      default:
+        return this.NN;
+    }
+  }
 
   public static getRingColor(resistance: number, ringNum: number) {
     let multiplier = 1;
@@ -118,6 +147,18 @@ export class Color {
   }
 }
 
+export function getResistanceFromColors(
+  firstRingColor: string,
+  secondRingColor: string,
+  thirdRingColor: string,
+): string {
+  const fr: Color = Color.getColorByHex(firstRingColor);
+  const sr: Color = Color.getColorByHex(secondRingColor);
+  const tr: Color = Color.getColorByHex(thirdRingColor);
+
+  return ((fr.firstRing * 10 + sr.secondRing) * tr.thirdRing).toFixed(2);
+}
+
 export function calcEReihe(num: number): Array<string> {
   const list = ['1.0'];
   const k = Math.pow(10, 1 / num);
@@ -129,15 +170,15 @@ export function calcEReihe(num: number): Array<string> {
 }
 
 function findWithTolerance(eReihe: EReihe, number: number) {
-  return (eReihe.value.find((num) => {
+  return eReihe.value.find((num) => {
     const tolerance = eReihe.tolerance;
     let n = +num;
     if (n === number) {
       return true;
     }
 
-    return (n - n * tolerance <= number) && (n + n * tolerance >= number);
-  }));
+    return n - n * tolerance <= number && n + n * tolerance >= number;
+  });
 }
 
 export class EReihe {
@@ -150,11 +191,11 @@ export class EReihe {
   constructor(
     public name: string,
     public tolerance: number,
-    public value: Array<string>
+    public value: Array<string>,
   ) {}
-  
+
   public static partOf(resistance: number): Array<string> {
-    const list = []
+    const list = [];
     if (findWithTolerance(this.E_6, resistance)) {
       list.push('E 6');
     }

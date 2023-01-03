@@ -1,29 +1,58 @@
 <script lang="ts">
   import { Color, EReihe } from './scripts/helper';
+  import Dropdown from './components/Dropdown.svelte';
+  import {resistance} from './store/ResistanceStore';
+  import {
+    firstRingColor,
+    secondRingColor,
+    thirdRingColor,
+  } from './store/RingColorStore';
+  import {
+    firstRingDropdownOpen,
+    secondRingDropdownOpen,
+    thirdRingDropdownOpen,
+  } from './store/DropdownStore';
 
-  let resistance = '';
   let eReihen = [];
 
-  let firstRingColor = 'transparent';
-  let secondRingColor = 'transparent';
-  let thirdRingColor = 'transparent';
+  function clearFields() {
+    resistance.set('');
+  }
+
+  function toggleDropdown(ring: number): void {
+    switch (ring) {
+      case 0:
+        firstRingDropdownOpen.set(!$firstRingDropdownOpen);
+        secondRingDropdownOpen.set(false);
+        thirdRingDropdownOpen.set(false);
+        break;
+      case 1:
+        firstRingDropdownOpen.set(false);
+        secondRingDropdownOpen.set(!$secondRingDropdownOpen);
+        thirdRingDropdownOpen.set(false);
+        break;
+      case 2:
+        firstRingDropdownOpen.set(false);
+        secondRingDropdownOpen.set(false);
+        thirdRingDropdownOpen.set(!$thirdRingDropdownOpen);
+        break;
+    }
+  }
 
   $: {
-    // TODO: FIX Calculation
     eReihen = EReihe.partOf(
-      +resistance % 100 > 0 ? +resistance % 100 : (+resistance % 100) + 1,
+      +$resistance % 100 > 0 ? +$resistance % 100 : (+$resistance % 100) + 1,
     );
 
-    if (resistance === '') {
-      firstRingColor = 'transparent';
-      secondRingColor = 'transparent';
-      thirdRingColor = 'transparent';
+    if ($resistance === '') {
+      firstRingColor.set('transparent');
+      secondRingColor.set('transparent');
+      thirdRingColor.set('transparent');
     } else {
-      firstRingColor = Color.getRingColor(+resistance, 0).colorCode;
-      secondRingColor = Color.getRingColor(+resistance, 1).colorCode;   
-      thirdRingColor = Color.getRingColor(+resistance, 2).colorCode;   
+      firstRingColor.set(Color.getRingColor(+$resistance, 0).colorCode);
+      secondRingColor.set(Color.getRingColor(+$resistance, 1).colorCode);
+      thirdRingColor.set(Color.getRingColor(+$resistance, 2).colorCode);
     }
-       
   }
 </script>
 
@@ -32,19 +61,82 @@
     Widerstand Kennzeichnungen
   </h1>
   <div class="grid grid-cols-2 mt-32 mx-auto">
-    <div class="ml-10 flex text-white gap-5 text-2xl items-center">
-      <p class="">Widerstand:</p>
-      <div class="flex flex-row gap-2 h-fit">
+    <div
+      class="ml-10 flex flex-col text-white gap-5 text-2xl justify-center border-r-neutral-800 border-r"
+    >
+      <div class="flex flex-row gap-2 h-fit justify-center">
+        <p class="">Widerstand:</p>
         <input
           type="text"
-          bind:value={resistance}
+          bind:value={$resistance}
           class="text-black"
           placeholder="42"
         />
         <p>&Omega;</p>
       </div>
+      <div
+        class="w-5/6 h-5 border-b border-b-neutral-800 text-center mx-auto mt-5"
+      >
+        <span class="text-xl bg-neutral-900 px-5"> ODER </span>
+      </div>
+      <div class="flex text-xl justify-around mt-8">
+        <div>
+          <p
+            title="Der erste Ring gibt die Farbe der ersten Ziffer an."
+            class="border-b border-dotted cursor-help w-fit mb-1"
+          >
+            Erster Ring:
+          </p>
+          <button
+            class="w-32 h-8 rounded-sm border-2 border-neutral-800"
+            style=background-color:{$firstRingColor}
+            on:click={() => toggleDropdown(0)}
+          />
+          {#if $firstRingDropdownOpen}
+            <Dropdown ring={0} />
+          {/if}
+        </div>
+        <div>
+          <p
+            title="Der zweite Ring gibt die Farbe der zweiten Ziffer an."
+            class="border-b border-dotted cursor-help w-fit mb-1"
+          >
+            Zweiter Ring:
+          </p>
+          <button
+            class="w-32 h-8 rounded-sm border-2 border-neutral-800"
+            style=background-color:{$secondRingColor}
+            on:click={() => toggleDropdown(1)}
+          />
+          {#if $secondRingDropdownOpen}
+            <Dropdown ring={1} />
+          {/if}
+        </div>
+        <div>
+          <p
+            title="Der drite Ring gibt die Farbe des Multiplikators an."
+            class="border-b border-dotted cursor-help w-fit mb-1"
+          >
+            Dritter Ring:
+          </p>
+          <button
+            class="w-32 h-8 rounded-sm border-2 border-neutral-800"
+            style=background-color:{$thirdRingColor}
+            on:click={() => toggleDropdown(2)}
+          />
+          {#if $thirdRingDropdownOpen}
+            <Dropdown ring={2} />
+          {/if}
+        </div>
+      </div>
+      <button
+        title="Setzt alle Farben zurück."
+        class="flex justify-center text-sm text-primary italic cursor-pointer hover:opacity-80 transition-opacity ease-in-out"
+        on:click={() => clearFields()}
+        >Alle zurücksetzen</button
+      >
     </div>
-    <div>
+    <div class="flex justify-center">
       <table class="text-white w-full max-w-3xl h-48 ">
         <tr class="text-3xl">
           <th class="w-1/3">Attribut</th>
@@ -53,8 +145,8 @@
         <tr class="text-xl">
           <td>Widerstand</td>
           <td
-            >{resistance && !isNaN(+resistance) ? (+resistance).toFixed(2) : ''}
-            {resistance !== '' && !isNaN(+resistance) ? 'Ω' : ''}</td
+            >{$resistance && !isNaN(+$resistance) ? (+$resistance).toFixed(2) : ''}
+            {$resistance !== '' && !isNaN(+$resistance) ? 'Ω' : ''}</td
           >
         </tr>
         <tr class="text-xl">
@@ -62,8 +154,7 @@
             >E-Reihe{eReihen.length === 1 ? '' : 'n'}
             <span
               title="Mit Toleranz. Die Toleranz ist von der E-Reihe abhängig."
-              class="border-dotted border-b cursor-help"
-              >(m. T.)</span
+              class="border-dotted border-b cursor-help">(m. T.)</span
             ></td
           >
 
@@ -120,7 +211,7 @@
           y2="99"
           x2="150"
           x1="150"
-          stroke={firstRingColor}
+          stroke={$firstRingColor}
           fill="none"
         />
         <line
@@ -130,7 +221,7 @@
           y2="99"
           x2="225"
           x1="225"
-          stroke={secondRingColor}
+          stroke={$secondRingColor}
           fill="none"
         />
         <line
@@ -140,7 +231,7 @@
           y2="99"
           x2="300"
           x1="300"
-          stroke={thirdRingColor}
+          stroke={$thirdRingColor}
           fill="none"
         />
       </g>
