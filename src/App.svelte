@@ -1,17 +1,19 @@
 <script lang="ts">
   import { Color, EReihe, getResistanceFromColors } from './scripts/helper';
   import Dropdown from './components/Dropdown.svelte';
-  import { resistance } from './store/ResistanceStore';
+  import { resistance } from './stores/ResistanceStore';
   import {
     firstRingColor,
     secondRingColor,
     thirdRingColor,
-  } from './store/RingColorStore';
+  } from './stores/RingColorStore';
   import {
     firstRingDropdownOpen,
     secondRingDropdownOpen,
     thirdRingDropdownOpen,
-  } from './store/DropdownStore';
+  } from './stores/DropdownStore';
+  import { isImprintModalOpen } from './stores/ModalStore';
+  import Modal from './components/Modal.svelte';
 
   let eReihen = [];
 
@@ -66,6 +68,26 @@
   }
 </script>
 
+<Modal condition={$isImprintModalOpen} title="Impressum">
+  <h2 class="text-white text-2xl font-bold mt-10">Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
+  <p class="text-neutral-200 text-xl">
+    Maik Zimmerschied<br />
+    Lindenstr. 2<br />
+    54531 Wallscheid
+  </p>
+
+  <h2 class="text-2xl text-white font-bold mt-5">Kontakt</h2>
+  <p class="text-neutral-200 text-xl">
+    E-Mail: lxcalflxw@protonmail.com
+  </p>
+
+  <p class="text-white mt-10">
+    Quelle: <a class="text-primary" href="https://www.e-recht24.de/impressum-generator.html"
+      >https://www.e-recht24.de/impressum-generator.html</a
+    >
+  </p>
+</Modal>
+
 <main class="bg-neutral-900 w-screen h-full xl:h-screen">
   <h1 class="text-white font-petrona text-4xl text-center pt-10">
     Widerstand Kennzeichnungen
@@ -74,7 +96,9 @@
     <div
       class="xl:ml-10 flex flex-col text-white gap-5 text-xl xs:text-2xl justify-center border-r-neutral-800 border-r"
     >
-      <div class="flex flex-col 2xs:flex-row gap-2 h-fit justify-center items-center">
+      <div
+        class="flex flex-col 2xs:flex-row gap-2 h-fit justify-center items-center"
+      >
         <p class="">Widerstand:</p>
         <div class="flex gap-2">
           <input
@@ -191,7 +215,7 @@
       width="449.99999999999994"
       height="110"
       xmlns="http://www.w3.org/2000/svg"
-      class="my-10 scale-75 2xs:scale-100 xl:scale-150 xl:my-24"
+      class="my-10 scale-75 2xs:scale-100 xl:scale-150 xl:my-36"
     >
       <g>
         <g id="svg_4">
@@ -259,7 +283,12 @@
       </g>
     </svg>
   </div>
-  <div>
-    <p class="fixed bottom-2 left-2 text-neutral-500">Impressum</p>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div on:click={() => isImprintModalOpen.set(true)}>
+    <p
+      class="fixed bottom-2 left-2 text-neutral-500 hover:text-primary cursor-pointer transition-all ease-in-out"
+    >
+      Impressum
+    </p>
   </div>
 </main>

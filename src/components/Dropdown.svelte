@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Color, getResistanceFromColors } from '../scripts/helper';
-  import { resistance } from '../store/ResistanceStore';
+  import { resistance } from '../stores/ResistanceStore';
   import {
     firstRingColor,
     secondRingColor,
     thirdRingColor,
-  } from '../store/RingColorStore';
+  } from '../stores/RingColorStore';
   import {
     firstRingDropdownOpen,
     secondRingDropdownOpen,
     thirdRingDropdownOpen,
-  } from '../store/DropdownStore';
+  } from '../stores/DropdownStore';
 
   export let ring: number;
 
