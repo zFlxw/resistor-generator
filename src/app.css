@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Petrona', serif;
+    src: url('/assets/fonts/Petrona.tff');
+}
+
+@layer base {
+    body {
+        @apply m-0 overflow-x-hidden;
+    }
+}
+
+td,
+th {
+    @apply border border-gray-200 p-2;
+}
+
+hr {
+    @apply border-0 shrink-0 h-px bg-neutral-800;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+}
