@@ -29,8 +29,6 @@
         thirdRingDropdownOpen.set(false);
         break;
     }
-
-    recalcResistance();
   }
 
   function getRingValue(color: Color) {
@@ -42,16 +40,6 @@
       case 2:
         return color.thirdRing;
     }
-  }
-
-  function recalcResistance() {
-    resistance.set(
-      getResistanceFromColors(
-        $firstRingColor,
-        $secondRingColor,
-        $thirdRingColor,
-      ),
-    );
   }
 </script>
 
@@ -149,7 +137,7 @@
         class="text-black block px-4 py-2 text-lg bg-gold w-full"
         role="menuitem"
         tabindex="-1"
-        on:click={() => handleClick(Color.WH)}>GD</button
+        on:click={() => handleClick(Color.GD)}>GD</button
       >
     {/if}
     {#if getRingValue(Color.SR) !== -1}

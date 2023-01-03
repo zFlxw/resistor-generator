@@ -68,6 +68,8 @@ export class Color {
         return this.BU;
       case '#8f2d56':
         return this.VT;
+      case '#808080':
+        return this.GY;
       case '#ffffff':
         return this.WH;
       case '#daa520':

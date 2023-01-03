@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Color, EReihe } from './scripts/helper';
+  import { Color, EReihe, getResistanceFromColors } from './scripts/helper';
   import Dropdown from './components/Dropdown.svelte';
-  import {resistance} from './store/ResistanceStore';
+  import { resistance } from './store/ResistanceStore';
   import {
     firstRingColor,
     secondRingColor,
@@ -37,6 +37,16 @@
         thirdRingDropdownOpen.set(!$thirdRingDropdownOpen);
         break;
     }
+  }
+
+  function recalcResistance() {
+    resistance.set(
+      getResistanceFromColors(
+        $firstRingColor,
+        $secondRingColor,
+        $thirdRingColor,
+      ),
+    );
   }
 
   $: {
@@ -89,7 +99,7 @@
           </p>
           <button
             class="w-32 h-8 rounded-sm border-2 border-neutral-800"
-            style=background-color:{$firstRingColor}
+            style="background-color:{$firstRingColor}"
             on:click={() => toggleDropdown(0)}
           />
           {#if $firstRingDropdownOpen}
@@ -105,7 +115,7 @@
           </p>
           <button
             class="w-32 h-8 rounded-sm border-2 border-neutral-800"
-            style=background-color:{$secondRingColor}
+            style="background-color:{$secondRingColor}"
             on:click={() => toggleDropdown(1)}
           />
           {#if $secondRingDropdownOpen}
@@ -121,7 +131,7 @@
           </p>
           <button
             class="w-32 h-8 rounded-sm border-2 border-neutral-800"
-            style=background-color:{$thirdRingColor}
+            style="background-color:{$thirdRingColor}"
             on:click={() => toggleDropdown(2)}
           />
           {#if $thirdRingDropdownOpen}
@@ -129,12 +139,18 @@
           {/if}
         </div>
       </div>
-      <button
-        title="Setzt alle Farben zurück."
-        class="flex justify-center text-sm text-primary italic cursor-pointer hover:opacity-80 transition-opacity ease-in-out"
-        on:click={() => clearFields()}
-        >Alle zurücksetzen</button
-      >
+      <div class="flex justify-around">
+        <button
+          title="Setzt alle Farben zurück."
+          class="text-lg bg-neutral-800 py-2 px-5 rounded-lg hover:bg-gray-600 transition-all ease-in-out"
+          on:click={() => clearFields()}>Zurücksetzen</button
+        >
+        <button
+          class="text-lg bg-neutral-800 py-2 px-5 rounded-lg hover:bg-gray-600 transition-all ease-in-out"
+          on:click={() => recalcResistance()}
+          >Anwenden</button
+        >
+      </div>
     </div>
     <div class="flex justify-center">
       <table class="text-white w-full max-w-3xl h-48 ">
@@ -145,7 +161,9 @@
         <tr class="text-xl">
           <td>Widerstand</td>
           <td
-            >{$resistance && !isNaN(+$resistance) ? (+$resistance).toFixed(2) : ''}
+            >{$resistance && !isNaN(+$resistance)
+              ? (+$resistance).toFixed(2)
+              : ''}
             {$resistance !== '' && !isNaN(+$resistance) ? 'Ω' : ''}</td
           >
         </tr>
@@ -164,7 +182,7 @@
     </div>
   </div>
   <hr class="mx-12 mt-20" />
-  <div class="flex justify-center mt-52 my-auto">
+  <div class="flex justify-center mt-36 my-auto">
     <svg
       width="449.99999999999994"
       height="110"
