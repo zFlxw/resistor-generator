@@ -1,17 +1,17 @@
 export class Color {
   public static readonly BK = new Color(-1, 0, 1, -1, 'Schwarz', '#000000');
-  public static readonly BN = new Color(1, 1, 10, 0.01, 'Braun', '');
+  public static readonly BN = new Color(1, 1, 10, 0.01, 'Braun', '#7B3F00');
   public static readonly RD = new Color(2, 2, 100, 0.02, 'Rot', '#ff0000');
-  public static readonly OG = new Color(3, 3, 1000, -1, 'Orange', '#ff0000');
-  public static readonly YE = new Color(4, 4, 10000, -1, 'Gelb', '#ff0000');
-  public static readonly GN = new Color(5, 5, 100000, 0.005, 'Grün', '#ff0000');
+  public static readonly OG = new Color(3, 3, 1000, -1, 'Orange', '#fb8500');
+  public static readonly YE = new Color(4, 4, 10000, -1, 'Gelb', '#ffb703');
+  public static readonly GN = new Color(5, 5, 100000, 0.005, 'Grün', '#3a5a40');
   public static readonly BU = new Color(
     6,
     6,
     1000000,
     0.0025,
     'Blau',
-    '#ff0000',
+    '#0077b6',
   );
   public static readonly VT = new Color(
     7,
@@ -19,9 +19,9 @@ export class Color {
     10000000,
     0.001,
     'Violett',
-    '#ff0000',
+    '#8f2d56',
   );
-  public static readonly GY = new Color(8, 8, 100000000, -1, 'Grau', '#ff0000');
+  public static readonly GY = new Color(8, 8, 100000000, -1, 'Grau', '#808080');
   public static readonly WH = new Color(
     9,
     9,
@@ -30,8 +30,8 @@ export class Color {
     'Weiß',
     '#ffffff',
   );
-  public static readonly GD = new Color(-1, -1, 0.1, 0.05, 'Gold', '#ffffff');
-  public static readonly SR = new Color(-1, -1, 0.01, 0.1, 'Silber', '#ffffff');
+  public static readonly GD = new Color(-1, -1, 0.1, 0.05, 'Gold', '#FFD700');
+  public static readonly SR = new Color(-1, -1, 0.01, 0.1, 'Silber', '#silver');
   public static readonly NN = new Color(
     -1,
     -1,
@@ -49,6 +49,73 @@ export class Color {
     public name: string,
     public colorCode: string,
   ) {}
+
+  public static getRingColor(resistance: number, ringNum: number) {
+    let multiplier = 1;
+    let tmp = resistance;
+    while (tmp > 10) {
+      tmp = resistance / multiplier;
+      multiplier *= 10;
+    }
+
+    let split = tmp.toFixed(1).split('.');
+
+    let number = split[ringNum];
+    if (ringNum === 2) {
+      number = (multiplier / 10).toString();
+      switch (number) {
+        case '0.01':
+          return this.SR;
+        case '0.1':
+          return this.GD;
+        case '1':
+          return this.BK;
+        case '10':
+          return this.BN;
+        case '100':
+          return this.RD;
+        case '1000':
+          return this.OG;
+        case '10000':
+          return this.YE;
+        case '100000':
+          return this.GN;
+        case '1000000':
+          return this.BU;
+        case '10000000':
+          return this.VT;
+        case '100000000':
+          return this.GY;
+        case '1000000000':
+          return this.WH;
+      }
+    }
+
+    switch (number) {
+      case '0':
+        return this.BK;
+      case '1':
+        return this.BN;
+      case '2':
+        return this.RD;
+      case '3':
+        return this.OG;
+      case '4':
+        return this.YE;
+      case '5':
+        return this.GN;
+      case '6':
+        return this.BU;
+      case '7':
+        return this.VT;
+      case '8':
+        return this.GY;
+      case '9':
+        return this.WH;
+      default:
+        return this.NN;
+    }
+  }
 }
 
 export function calcEReihe(num: number): Array<string> {

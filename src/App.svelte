@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { EReihe } from './scripts/Helper';
+  import { Color, EReihe } from './scripts/helper';
 
   let resistance = '';
   let eReihen = [];
@@ -10,7 +10,20 @@
 
   $: {
     // TODO: FIX Calculation
-    eReihen = EReihe.partOf(+resistance % 10);
+    eReihen = EReihe.partOf(
+      +resistance % 100 > 0 ? +resistance % 100 : (+resistance % 100) + 1,
+    );
+
+    if (resistance === '') {
+      firstRingColor = 'transparent';
+      secondRingColor = 'transparent';
+      thirdRingColor = 'transparent';
+    } else {
+      firstRingColor = Color.getRingColor(+resistance, 0).colorCode;
+      secondRingColor = Color.getRingColor(+resistance, 1).colorCode;   
+      thirdRingColor = Color.getRingColor(+resistance, 2).colorCode;   
+    }
+       
   }
 </script>
 
@@ -32,7 +45,7 @@
       </div>
     </div>
     <div>
-      <table class="text-white w-full max-w-3xl h-48">
+      <table class="text-white w-full max-w-3xl h-48 ">
         <tr class="text-3xl">
           <th class="w-1/3">Attribut</th>
           <th class="w-2/3">Wert</th>
@@ -45,7 +58,14 @@
           >
         </tr>
         <tr class="text-xl">
-          <td>E-Reihe{eReihen.length === 1 ? '' : 'n'}</td>
+          <td class=""
+            >E-Reihe{eReihen.length === 1 ? '' : 'n'}
+            <span
+              title="Mit Toleranz. Die Toleranz ist von der E-Reihe abhängig."
+              class="border-dotted border-b cursor-help"
+              >(m. T.)</span
+            ></td
+          >
 
           <td>{eReihen}</td>
         </tr>
