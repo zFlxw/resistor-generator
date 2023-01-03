@@ -142,11 +142,11 @@
       <div class="flex justify-around">
         <button
           title="Setzt alle Farben zurück."
-          class="text-lg bg-neutral-800 py-2 px-5 rounded-lg hover:bg-gray-600 transition-all ease-in-out"
+          class="text-lg bg-gray-500 py-2 px-5 rounded-lg hover:bg-gray-600 transition-all ease-in-out"
           on:click={() => clearFields()}>Zurücksetzen</button
         >
         <button
-          class="text-lg bg-neutral-800 py-2 px-5 rounded-lg hover:bg-gray-600 transition-all ease-in-out"
+          class="text-lg bg-blue-500 py-2 px-5 rounded-lg hover:bg-blue-600 transition-all ease-in-out"
           on:click={() => recalcResistance()}
           >Anwenden</button
         >
